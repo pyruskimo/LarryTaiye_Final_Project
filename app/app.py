@@ -3,6 +3,10 @@ import mysql.connector
 import simplejson as json
 from flask import Flask, Response
 from flask import render_template
+from jinja2 import Environment, FileSystemLoader
+
+env = Environment(loader=FileSystemLoader('app/templates'))
+template = env.get_template('index.html')
 
 app = Flask(__name__)
 
@@ -33,6 +37,7 @@ def index():
     cities_data = cities_import()
 
     return render_template('index.html', title='Home', user=user, cities=cities_data)
+# return render_template('index.html', title='Home', user=user, cities=cities_data)
 
 
 @app.route('/api/cities')
