@@ -32,7 +32,7 @@ def index():
     user = {'username': 'Benjamin'}
     cities_data = cities_import()
 
-    return render_template('index.html', )
+    return render_template('index.html', title='Home', user='user', cities=cities_data)
 
 
 @app.route('/api/cities')
