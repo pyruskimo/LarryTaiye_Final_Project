@@ -4,7 +4,7 @@ import simplejson as json
 from flask import Flask, Response
 from flask import render_template
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='/Users/bml/dockerfile/Web-Dev-P3/app/template/')
 
 
 def cities_import() -> List[Dict]:
