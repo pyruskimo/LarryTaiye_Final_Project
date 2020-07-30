@@ -10,7 +10,7 @@ app = Flask(__name__, template_folder="templates")
 
 templateLoader = jinja2.FileSystemLoader(searchpath="./templates/")
 templateEnv = jinja2.Environment(loader=templateLoader)
-TEMPLATE_FILE = 'index.html'
+TEMPLATE_FILE = "index.html"
 template = templateEnv.get_template(TEMPLATE_FILE)
 # outputText = template.render()
 
