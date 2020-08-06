@@ -31,7 +31,6 @@ class User:
     def __repr__(self):
         return f'<User: {self.username}>'
 
-
 users = []
 users.append(User(id=1, username='Taiye', password='123456'))
 users.append(User(id=2, username='larry', password='654321'))
@@ -50,7 +49,6 @@ app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
 app.config['MYSQL_DATABASE_PORT'] = 3306
 app.config['MYSQL_DATABASE_DB'] = 'citiesData'
 mysql.init_app(app)
-
 
 # @login.user_loader
 # def load_user(id):
