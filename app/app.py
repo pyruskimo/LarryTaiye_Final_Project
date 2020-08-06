@@ -50,6 +50,8 @@ app.config['MYSQL_DATABASE_PORT'] = 3306
 app.config['MYSQL_DATABASE_DB'] = 'citiesData'
 mysql.init_app(app)
 
+###
+
 # @login.user_loader
 # def load_user(id):
 #     return User.query.get(int(id))
