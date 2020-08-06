@@ -1,11 +1,47 @@
 from typing import List, Dict
 import simplejson as json
-from flask import Flask, request, Response, redirect
+from flask import Flask, request, Response, redirect, url_for, session
 from flask import render_template
+from flask_wtf import FlaskForm
 from flaskext.mysql import MySQL
 from pymysql.cursors import DictCursor
+from flask_login import (LoginManager,
+                         login_user,
+                         current_user,
+                         login_required,
+                         UserMixin,
+                         logout_user, login_manager
+                         )
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.routing import ValidationError
+
+# db = SQLAlchemy(app)
+# migrate = Migrate(app, db)
+from wtforms import PasswordField, BooleanField, SubmitField, StringField
+from wtforms.validators import DataRequired
+
+
+class User:
+    def __init__(self, id, username, password):
+        self.id = id
+        self.username = username
+        self.password = password
+
+    def __repr__(self):
+        return f'<User: {self.username}>'
+
+
+users = []
+users.append(User(id=1, username='Taiye', password='123456'))
+users.append(User(id=2, username='larry', password='654321'))
+users.append(User(id=3, username='test_user', password='test_password'))
+
 
 app = Flask(__name__)
+app.secret_key = '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'
+# login_manager = LoginManager()
+# login_manager.login_view = 'login'
 mysql = MySQL(cursorclass=DictCursor)
 
 app.config['MYSQL_DATABASE_HOST'] = 'db'
@@ -14,6 +50,71 @@ app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
 app.config['MYSQL_DATABASE_PORT'] = 3306
 app.config['MYSQL_DATABASE_DB'] = 'citiesData'
 mysql.init_app(app)
+
+
+# @login.user_loader
+# def load_user(id):
+#     return User.query.get(int(id))
+
+
+# class Post(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     body = db.Column(db.String(140))
+#     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+#
+#     def __repr__(self):
+#         return '<Post {}>'.format(self.body)
+
+
+# @app.route('/')
+
+# class LoginForm(object):
+#     class LoginForm(FlaskForm):
+#         username = StringField('Username', validators=[DataRequired()])
+#         password = PasswordField('Password', validators=[DataRequired()])
+#         remember_me = BooleanField('Remember Me')
+#         submit = SubmitField('Sign In')
+
+
+# LoginForm = LoginForm()
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        session.pop('user_id', None)
+
+        username = request.form['username']
+        password = request.form['password']
+
+        user = [x for x in users if x.username == username][0]
+        if user and user.password == password:
+            session['user_id'] = user.id
+            return redirect(url_for('index'))
+
+        return redirect(url_for('login'))
+
+    return render_template('login.html')
+
+
+# @login_required
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     if current_user.is_authenticated:
+#         return redirect(url_for('index'))
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         user = User.query.filter_by(username=form.username.data).first()
+#         if user is None or not user.check_password(form.password.data):
+#             flash('Invalid username or password')
+#             return redirect(url_for('login'))
+#         login_user(user, remember=form.remember_me.data)
+#         next_page = request.args.get('next')
+#         if not next_page or url_parse(next_page).netloc != '':
+#             next_page = url_for('index')
+#         return redirect(next_page)
+#     return render_template('login.html', title='Sign In', forms=form)
 
 
 @app.route('/', methods=['GET'])

@@ -1,3 +1,12 @@
 Flask
 flask-mysql
 simplejson
+sendgrid
+Flask-Mail
+flask-login
+app
+flask-sqlalchemy
+flask-migrate
+flask-wtf
+wtforms
+email-validator
